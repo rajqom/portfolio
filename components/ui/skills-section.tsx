@@ -14,6 +14,9 @@ import {
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const specializations = [
   {
@@ -72,7 +75,7 @@ export default function SkillsSection() {
       if (headingRef.current) {
         tl.from(headingRef.current, {
           y: 30,
-          autoAlpha: 0,
+          opacity: 0,
           duration: 0.8,
           ease: 'power3.out',
         });
@@ -84,7 +87,7 @@ export default function SkillsSection() {
         cards,
         {
           y: 40,
-          autoAlpha: 0,
+          opacity: 0,
           duration: 0.8,
           stagger: 0.1,
           ease: 'power3.out',
@@ -118,13 +121,13 @@ export default function SkillsSection() {
             return (
               <div
                 key={index}
-                className={`skill-card group relative flex flex-col rounded-3xl border border-white/10 bg-white/[0.02] p-8 lg:p-10 backdrop-blur-md transition-all duration-500 hover:bg-white/[0.06] hover:border-white/20`}
+                className={`skill-card group relative flex flex-col rounded-3xl border border-white/10 bg-white/[0.03] p-8 lg:p-10 backdrop-blur-md transition-all duration-500 hover:bg-white/[0.08] hover:border-white/20`}
               >
                 {/* Dynamic Gradient Overlay */}
                 <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${spec.color} to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
                 
                 <div className="relative z-10">
-                  <div className="mb-8 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 text-white/60 ring-1 ring-white/10 transition-all duration-500 group-hover:scale-110 group-hover:bg-white/10 group-hover:text-white group-hover:ring-white/20">
+                  <div className="mb-8 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 text-white/80 ring-1 ring-white/20 transition-all duration-500 group-hover:scale-110 group-hover:bg-white/10 group-hover:text-white group-hover:ring-white/30">
                     <Icon size={32} />
                   </div>
                   
@@ -132,7 +135,7 @@ export default function SkillsSection() {
                     {spec.title}
                   </h3>
                   
-                  <p className="mb-8 text-base font-light leading-relaxed text-white/60 lg:max-w-[80%]">
+                  <p className="mb-8 text-base font-light leading-relaxed text-white/70 lg:max-w-[80%]">
                     {spec.description}
                   </p>
                   
@@ -140,7 +143,7 @@ export default function SkillsSection() {
                     {spec.skills.map((skill, skillIndex) => (
                       <span
                         key={skillIndex}
-                        className="rounded-full border border-white/5 bg-white/[0.03] px-4 py-1.5 text-xs font-light tracking-tight text-white/70 backdrop-blur-sm transition-colors group-hover:border-white/10 group-hover:text-white/90"
+                        className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-1.5 text-xs font-light tracking-tight text-white/90 backdrop-blur-sm transition-colors group-hover:border-white/20 group-hover:text-white"
                       >
                         {skill}
                       </span>
@@ -153,13 +156,13 @@ export default function SkillsSection() {
         </div>
 
         {/* Additional Technical Proficiencies */}
-        <div className="skill-card relative rounded-3xl border border-white/10 bg-white/[0.01] p-10 backdrop-blur-md">
+        <div className="skill-card relative rounded-3xl border border-white/10 bg-white/[0.02] p-10 backdrop-blur-md">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
             <div className="text-center lg:text-left space-y-2">
               <h3 className="text-xl font-light tracking-tight text-white">
                 Extended Proficiencies
               </h3>
-              <p className="text-sm font-light text-white/50 max-w-xs">
+              <p className="text-sm font-light text-white/70 max-w-xs">
                 Comprehensive skills that complement core development workflows.
               </p>
             </div>
@@ -172,10 +175,10 @@ export default function SkillsSection() {
                     key={index}
                     className="flex flex-col items-center gap-4 group cursor-default"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 text-white/40 ring-1 ring-white/10 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white group-hover:scale-110">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 text-white/80 ring-1 ring-white/20 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white group-hover:scale-110 group-hover:ring-white/30">
                       <Icon size={22} />
                     </div>
-                    <span className="text-xs font-light tracking-tight text-white/60 group-hover:text-white transition-colors">
+                    <span className="text-xs font-light tracking-tight text-white/80 group-hover:text-white transition-colors">
                       {skill.label}
                     </span>
                   </div>

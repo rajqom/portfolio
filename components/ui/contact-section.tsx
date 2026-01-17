@@ -6,6 +6,9 @@ import SectionContainer, { SectionHeading } from './section-container';
 import { Mail, Github, Linkedin, Twitter } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const contactMethods = [
   {
@@ -81,7 +84,7 @@ export default function ContactSection() {
   );
 
   return (
-    <SectionContainer id="contact" variant="gradient" className="overflow-hidden">
+    <SectionContainer id="contact" variant="gradient" animate={false} className="overflow-hidden">
       {/* Background depth spots */}
       <div className="absolute top-1/4 left-1/4 -z-10 h-[400px] w-[400px] rounded-full bg-white/[0.02] blur-[120px]" />
       <div className="absolute bottom-1/4 right-1/4 -z-10 h-[300px] w-[300px] rounded-full bg-white/[0.01] blur-[100px]" />

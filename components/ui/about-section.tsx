@@ -5,6 +5,9 @@ import { Code2, Smartphone, Puzzle, Bot, CheckCircle2 } from 'lucide-react';
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const highlights = [
   {
@@ -46,7 +49,7 @@ export default function AboutSection() {
 
       gsap.from(cardsRef.current.children, {
         y: 40,
-        autoAlpha: 0,
+        opacity: 0,
         duration: 0.8,
         stagger: 0.1,
         ease: 'power3.out',
@@ -60,7 +63,7 @@ export default function AboutSection() {
   );
 
   return (
-    <SectionContainer id="about" variant="darker" className="overflow-hidden">
+    <SectionContainer id="about" variant="darker" animate={false} className="overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute top-1/2 left-1/2 -z-10 h-[400px] w-[400px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5 blur-[120px]" />
       <div className="absolute -right-20 top-0 -z-10 h-[300px] w-[300px] rounded-full bg-white/5 blur-[100px]" />

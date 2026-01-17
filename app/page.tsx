@@ -3,6 +3,7 @@ import Header from "@/components/ui/header";
 import AboutSection from "@/components/ui/about-section";
 import SkillsSection from "@/components/ui/skills-section";
 import ProjectsSection from "@/components/ui/projects-section";
+import TestimonialsSection from "@/components/ui/testimonials-section";
 import ContactSection from "@/components/ui/contact-section";
 import Footer from "@/components/ui/footer";
 
@@ -25,6 +26,7 @@ export default function Home() {
         <AboutSection />
         <SkillsSection />
         <ProjectsSection />
+        <TestimonialsSection />
         <ContactSection />
       </main>
       <Footer />

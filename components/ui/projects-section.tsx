@@ -3,9 +3,14 @@
 import SectionContainer, { SectionHeading } from './section-container';
 import { ExternalLink, Github, ArrowRight, Building2, Globe, Cpu } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { projects } from '@/lib/projects-data';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const companies = [
   { name: 'TechVision', logo: Building2 },
@@ -13,49 +18,6 @@ const companies = [
   { name: 'AI Research', logo: Cpu },
   { name: 'DevStudio', logo: Building2 },
   { name: 'FutureTech', logo: Cpu },
-];
-
-const projects = [
-  {
-    title: 'Enterprise AI Ecosystem',
-    category: 'AI Agents & Automation',
-    description: 'A multi-agent system designed to automate complex procurement workflows, resulting in a 40% reduction in processing time.',
-    image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop',
-    tags: ['Next.js', 'LangChain', 'OpenAI', 'Vector DBs'],
-    impact: '40% Process Efficiency',
-    demoUrl: '#',
-    codeUrl: '#',
-  },
-  {
-    title: 'Fintech Mobile Experience',
-    category: 'Mobile Application',
-    description: 'A cross-platform high-performance banking app featuring biometric security and real-time transaction processing.',
-    image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=800&h=600&fit=crop',
-    tags: ['React Native', 'Node.js', 'Biometrics', 'Real-time'],
-    impact: '50k+ Active Users',
-    demoUrl: '#',
-    codeUrl: '#',
-  },
-  {
-    title: 'Precision Browser Utility',
-    category: 'Chrome Extension',
-    description: 'A professional-grade extension for specialized data extraction and research automation across enterprise platforms.',
-    image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=600&fit=crop',
-    tags: ['Chrome APIs', 'TypeScript', 'WASM', 'Automation'],
-    impact: '10k+ Downloads',
-    demoUrl: '#',
-    codeUrl: '#',
-  },
-  {
-    title: 'Nexus Web Platform',
-    category: 'Web Development',
-    description: 'A lightning-fast e-commerce solution focused on core web vitals and advanced inventory management.',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
-    tags: ['Next.js 15', 'Tailwind v4', 'PostgreSQL', 'Redis'],
-    impact: '99/100 Lighthouse Score',
-    demoUrl: '#',
-    codeUrl: '#',
-  },
 ];
 
 export default function ProjectsSection() {
@@ -96,7 +58,7 @@ export default function ProjectsSection() {
   );
 
   return (
-    <SectionContainer id="projects" variant="darker" className="overflow-hidden">
+    <SectionContainer id="projects" variant="darker" animate={false} className="overflow-hidden">
       {/* Atmosphere Background */}
       <div className="absolute top-1/2 left-0 -z-10 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-white/[0.02] blur-[150px]" />
 
@@ -204,13 +166,13 @@ export default function ProjectsSection() {
 
                 {/* Read More Link */}
                 <div className="pt-4 mt-auto">
-                  <a
-                    href={project.demoUrl}
+                  <Link
+                    href={`/projects/${project.slug}`}
                     className="inline-flex items-center gap-2 text-sm font-light tracking-tight text-white/40 transition-all duration-300 group-hover:text-white group-hover:gap-3"
                   >
                     Explore Case Study
                     <ArrowRight size={14} />
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
