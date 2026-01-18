@@ -118,16 +118,32 @@ export default function Header() {
               }`} />
             </Link>
           ))}
+          
+          {/* Desktop CTA Button */}
+          <Link
+            href="/contact"
+            className="px-6 py-2.5 rounded-full bg-white text-black text-[13px] font-light tracking-tight hover:bg-white/90 transition-all duration-300 hover:scale-105"
+          >
+            Book a Call
+          </Link>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden text-white/80 hover:text-white transition-colors duration-300"
-          aria-label="Toggle menu"
-        >
-          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
+        {/* Mobile: CTA + Menu Button */}
+        <div className="md:hidden flex items-center gap-4">
+          <Link
+            href="/contact"
+            className="px-5 py-2 rounded-full bg-white text-black text-xs font-light tracking-tight hover:bg-white/90 transition-all duration-300"
+          >
+            Book a Call
+          </Link>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="text-white/80 hover:text-white transition-colors duration-300"
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </nav>
 
       {/* Mobile Menu */}

@@ -7,36 +7,30 @@ import { motion } from 'framer-motion';
 
 const textTestimonials = [
   {
-    name: 'Sarah Johnson',
-    role: 'Product Manager at TechVision',
-    content: 'Bright is an exceptional developer who transformed our complex requirements into a seamless, high-performance web platform. His attention to detail and proactive problem-solving were instrumental to our success.',
+    name: 'Paul Lo',
+    role: 'Founder at Spacel',
+    content: 'Zynra Studio delivered an exceptional workspace marketplace platform. The booking system is seamless, the mobile app performs flawlessly, and the real-time location features work perfectly. Their team truly understood our vision and brought it to life.',
     rating: 5,
   },
   {
-    name: 'Marcus Chen',
-    role: 'Founder of GlobalApps',
-    content: 'The mobile app Bright developed for us exceeded all expectations. The performance is native-like, and the biometric security integration is flawless. A true professional who understands both code and business.',
+    name: 'James Milton',
+    role: 'CEO at Project Sync',
+    content: 'Working with Zynra Studio on our task management platform was incredible. Their UI/UX design expertise and development skills created a product our users love. The attention to detail and commitment to quality is unmatched.',
     rating: 5,
   },
   {
-    name: 'Elena Rodriguez',
-    role: 'Lead Researcher at AI Labs',
-    content: 'Working with Bright on our AI automation tools was a game-changer. His deep understanding of LLMs and agent orchestration helped us automate workflows we thought were impossible to digitize.',
-    rating: 5,
-  },
-  {
-    name: 'David Smith',
-    role: 'CTO at FutureTech',
-    content: 'Bright delivered a high-impact Chrome extension that has significantly improved our team productivity. The extraction engine is fast, reliable, and perfectly integrated with our cloud infrastructure.',
+    name: 'Oliver Palme',
+    role: 'Founder at Esplit',
+    content: 'Zynra Studio built our Web3 splitting platform from the ground up. Their expertise in smart contract development and frontend integration delivered a secure, transparent platform that our community trusts. Truly exceptional work.',
     rating: 5,
   },
 ];
 
 const videoTestimonial = {
-  name: 'Robert Wilson',
-  role: 'CEO at RetailGiant Inc',
+  name: 'Rafael Richardson',
+  role: 'CEO at VoiceVenture AI',
   thumbnail: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&h=450&fit=crop',
-  quote: "Bright's technical expertise and vision were exactly what we needed for our enterprise platform migration.",
+  quote: "Zynra Studio's technical expertise was exactly what we needed. They built our complete ecosystem—website, web app, and mobile app—helping us reclaim 5-7 hours per staff member every week.",
 };
 
 export default function TestimonialsSection() {
@@ -52,8 +46,8 @@ export default function TestimonialsSection() {
         <div className="lg:col-span-7 lg:sticky lg:top-32 h-fit space-y-12 py-4">
           <SectionHeading
             badge="Testimonials"
-            title="Trusted by Leaders"
-            subtitle="Don't just take my word for it. Here's what my clients and collaborators have to say about our work together."
+            title="Trusted by Founders"
+            subtitle="Don't just take our word for it. Here's what our clients have to say about working with Zynra Studio."
             align="left"
           />
           

@@ -132,7 +132,7 @@ export default function Hero({
         <div className="flex flex-col items-start gap-8 max-w-4xl">
           <div ref={badgeRef} className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-md">
             <span className="text-[10px] font-light uppercase tracking-[0.2em] text-white/60">{badgeLabel}</span>
-            <span className="h-1 w-1 rounded-full bg-white/20" />
+            <span className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
             <span className="text-[11px] font-light tracking-tight text-white/80">{badgeText}</span>
           </div>
 

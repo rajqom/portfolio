@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <!-- Background -->
+  <rect width="500" height="500" fill="#000000"/>
+  
+  <!-- Z Letter -->
+  <path d="M125 150 L375 150 L175 300 L375 300 L375 350 L125 350 L325 200 L125 200 Z" 
+        fill="#FFFFFF" 
+        stroke="#FFFFFF" 
+        stroke-width="4" 
+        stroke-linejoin="round"/>
+</svg>

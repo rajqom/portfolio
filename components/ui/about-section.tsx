@@ -1,7 +1,7 @@
 'use client';
 
 import SectionContainer, { SectionHeading } from './section-container';
-import { Code2, Smartphone, Puzzle, Bot, CheckCircle2 } from 'lucide-react';
+import { Code2, Smartphone, Palette, Bot, CheckCircle2 } from 'lucide-react';
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -22,9 +22,9 @@ const highlights = [
     description: 'High-performance iOS and Android applications.',
   },
   {
-    icon: Puzzle,
-    title: 'Chrome Extensions',
-    description: 'Specialized browser tools for workflow automation.',
+    icon: Palette,
+    title: 'UI/UX Design',
+    description: 'User-centered design that combines aesthetics with functionality.',
   },
   {
     icon: Bot,
@@ -70,9 +70,9 @@ export default function AboutSection() {
       <div className="absolute -right-20 top-0 -z-10 h-[300px] w-[300px] rounded-full bg-white/5 blur-[100px]" />
 
       <SectionHeading
-        badge="About Me"
-        title="Engineering with Purpose"
-        subtitle="Bridging the gap between complex logic and seamless user experience."
+        badge="About Us"
+        title="Building Digital Excellence"
+        subtitle="A dedicated team transforming visions into powerful, scalable digital solutions."
       />
 
       <div ref={containerRef} className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
@@ -80,17 +80,18 @@ export default function AboutSection() {
         <div className="lg:col-span-7 space-y-8">
           <div className="space-y-4">
             <h3 className="text-2xl font-light tracking-tight text-white/90">
-              The Journey of <span className="font-normal text-white">Bright Akolade</span>
+              Who <span className="font-normal text-white">We Are</span>
             </h3>
             <p className="text-base font-light leading-relaxed tracking-tight text-white/75 sm:text-lg">
-              I am a results-driven developer dedicated to building elegant digital solutions. 
-              My expertise isn&apos;t just in writing code; it&apos;s in <span className="text-white">architecting experiences</span> that 
-              empower users and businesses alike. From the intricate logic of AI agents to the precise pixels 
-              of mobile interfaces, I bring a holistic view to every project.
+              Zynra Studio is a modern digital agency specializing in web and mobile development. 
+              We don&apos;t just write code—we <span className="text-white">craft experiences</span> that 
+              drive real business results. From AI-powered applications to intuitive mobile interfaces, 
+              our team brings technical expertise and creative vision to every project.
             </p>
             <p className="text-base font-light leading-relaxed tracking-tight text-white/75 sm:text-lg">
-              In a rapidly evolving landscape, I specialize in staying ahead of the curve, utilizing 
-              modern tech stacks to deliver robust, scalable, and future-proof applications.
+              We partner with forward-thinking businesses to build products that users love and that 
+              scale with your growth. Our approach combines cutting-edge technology with timeless 
+              design principles to deliver solutions that stand the test of time.
             </p>
           </div>
 
@@ -109,15 +110,15 @@ export default function AboutSection() {
           <div className="flex flex-wrap gap-4 pt-4">
             <Link
               href="/projects"
-              className="group relative flex items-center gap-2 rounded-2xl bg-white px-6 py-3 text-sm font-light tracking-tight text-black transition-all duration-300 hover:scale-105 hover:bg-white/90"
+              className="group relative flex items-center gap-2 rounded-2xl bg-white px-6 py-3 text-sm font-light tracking-tight text-black hover:scale-105 hover:bg-white/90"
             >
-              Explore Projects
+              View Our Work
             </Link>
             <Link
               href="/contact"
-              className="rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-light tracking-tight text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:border-white/20"
+              className="rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-light tracking-tight text-white backdrop-blur-sm hover:bg-white/10 hover:border-white/20"
             >
-              Get In Touch
+              Start a Project
             </Link>
           </div>
         </div>
@@ -129,12 +130,12 @@ export default function AboutSection() {
             return (
               <div
                 key={index}
-                className="group relative flex flex-col items-center text-center rounded-3xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur-md transition-all duration-500 hover:bg-white/[0.08] hover:border-white/20 hover:shadow-2xl hover:shadow-white/5"
+                className="group relative flex flex-col items-center text-center rounded-3xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur-md hover:bg-white/[0.08] hover:border-white/20 hover:shadow-2xl hover:shadow-white/5"
               >
                 {/* Subtle card glow */}
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/[0.05] to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/[0.05] to-transparent opacity-0 group-hover:opacity-100" />
                 
-                <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 text-white/60 ring-1 ring-white/10 transition-all duration-500 group-hover:scale-110 group-hover:bg-white/10 group-hover:text-white group-hover:ring-white/20">
+                <div className="relative mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 text-white/60 ring-1 ring-white/10 group-hover:scale-110 group-hover:bg-white/10 group-hover:text-white group-hover:ring-white/20">
                   <Icon size={28} />
                 </div>
                 

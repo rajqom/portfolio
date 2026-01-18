@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+  <!-- Background -->
+  <rect width="1000" height="1000" fill="#000000" rx="200"/>
+  
+  <!-- Z Letter -->
+  <path d="M250 300 L750 300 L350 600 L750 600 L750 700 L250 700 L650 400 L250 400 Z" 
+        fill="#FFFFFF" 
+        stroke="#FFFFFF" 
+        stroke-width="8" 
+        stroke-linejoin="round"/>
+  
+  <!-- Subtle accent line -->
+  <line x1="250" y1="350" x2="750" y2="350" 
+        stroke="#FFFFFF" 
+        stroke-width="2" 
+        opacity="0.3"/>
+</svg>

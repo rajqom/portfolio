@@ -119,16 +119,16 @@ export default function ContactSection() {
                 href={method.href}
                 target={method.href.startsWith('http') ? '_blank' : undefined}
                 rel={method.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                className="contact-method group flex flex-col items-center gap-4 rounded-3xl border border-white/5 bg-white/[0.02] p-8 backdrop-blur-md transition-all duration-500 hover:bg-white/[0.05] hover:border-white/10 hover:scale-105"
+                className="contact-method group flex flex-col items-center gap-4 rounded-3xl border border-white/5 bg-white/[0.02] p-8 backdrop-blur-md hover:bg-white/[0.05] hover:border-white/10 hover:scale-105"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 text-white/40 ring-1 ring-white/10 transition-all duration-500 group-hover:bg-white/10 group-hover:text-white group-hover:scale-110 group-hover:ring-white/20">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/5 text-white/40 ring-1 ring-white/10 group-hover:bg-white/10 group-hover:text-white group-hover:scale-110 group-hover:ring-white/20">
                   <Icon size={24} />
                 </div>
                 <div className="text-center space-y-1">
-                  <p className="text-[10px] font-light uppercase tracking-[0.2em] text-white/30 group-hover:text-white/50 transition-colors">
+                  <p className="text-[10px] font-light uppercase tracking-[0.2em] text-white/30 group-hover:text-white/50">
                     {method.label}
                   </p>
-                  <p className="text-sm font-light tracking-tight text-white/60 group-hover:text-white transition-colors">
+                  <p className="text-sm font-light tracking-tight text-white/60 group-hover:text-white">
                     {method.value}
                   </p>
                 </div>

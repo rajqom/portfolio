@@ -4,12 +4,12 @@ import SectionContainer, { SectionHeading } from './section-container';
 import {
   Code2,
   Smartphone,
-  Puzzle,
+  Palette,
   Bot,
   Layers,
-  Palette,
   Database,
   Zap,
+  Sparkles,
 } from 'lucide-react';
 import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
@@ -34,11 +34,11 @@ const specializations = [
     color: 'from-purple-500/10',
   },
   {
-    icon: Puzzle,
-    title: 'Chrome Extension',
-    description: 'Specialized browser tools designed to optimize user productivity.',
-    skills: ['Manifest V3', 'Chrome APIs', 'Automation'],
-    color: 'from-orange-500/10',
+    icon: Palette,
+    title: 'UI/UX Design',
+    description: 'User-centered design that combines aesthetics with intuitive functionality.',
+    skills: ['Figma', 'Wireframing', 'Prototyping', 'Design Systems'],
+    color: 'from-pink-500/10',
   },
   {
     icon: Bot,
@@ -50,8 +50,8 @@ const specializations = [
 ];
 
 const additionalSkills = [
-  { icon: Layers, label: 'UI/UX Design' },
-  { icon: Palette, label: 'Graphic Design' },
+  { icon: Layers, label: 'System Design' },
+  { icon: Sparkles, label: 'Chrome Extensions' },
   { icon: Database, label: 'Backend Ops' },
   { icon: Zap, label: 'SEO & Perf' },
 ];
@@ -121,13 +121,13 @@ export default function SkillsSection() {
             return (
               <div
                 key={index}
-                className={`skill-card group relative flex flex-col rounded-3xl border border-white/10 bg-white/[0.03] p-8 lg:p-10 backdrop-blur-md transition-all duration-500 hover:bg-white/[0.08] hover:border-white/20`}
+                className={`skill-card group relative flex flex-col rounded-3xl border border-white/10 bg-white/[0.03] p-8 lg:p-10 backdrop-blur-md hover:bg-white/[0.08] hover:border-white/20`}
               >
                 {/* Dynamic Gradient Overlay */}
-                <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${spec.color} to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100`} />
+                <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${spec.color} to-transparent opacity-0 group-hover:opacity-100`} />
                 
                 <div className="relative z-10">
-                  <div className="mb-8 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 text-white/80 ring-1 ring-white/20 transition-all duration-500 group-hover:scale-110 group-hover:bg-white/10 group-hover:text-white group-hover:ring-white/30">
+                  <div className="mb-8 inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 text-white/80 ring-1 ring-white/20 group-hover:scale-110 group-hover:bg-white/10 group-hover:text-white group-hover:ring-white/30">
                     <Icon size={32} />
                   </div>
                   
@@ -143,7 +143,7 @@ export default function SkillsSection() {
                     {spec.skills.map((skill, skillIndex) => (
                       <span
                         key={skillIndex}
-                        className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-1.5 text-xs font-light tracking-tight text-white/90 backdrop-blur-sm transition-colors group-hover:border-white/20 group-hover:text-white"
+                        className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-1.5 text-xs font-light tracking-tight text-white/90 backdrop-blur-sm group-hover:border-white/20 group-hover:text-white"
                       >
                         {skill}
                       </span>
@@ -175,10 +175,10 @@ export default function SkillsSection() {
                     key={index}
                     className="flex flex-col items-center gap-4 group cursor-default"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 text-white/80 ring-1 ring-white/20 transition-all duration-300 group-hover:bg-white/10 group-hover:text-white group-hover:scale-110 group-hover:ring-white/30">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/5 text-white/80 ring-1 ring-white/20 group-hover:bg-white/10 group-hover:text-white group-hover:scale-110 group-hover:ring-white/30">
                       <Icon size={22} />
                     </div>
-                    <span className="text-xs font-light tracking-tight text-white/80 group-hover:text-white transition-colors">
+                    <span className="text-xs font-light tracking-tight text-white/80 group-hover:text-white">
                       {skill.label}
                     </span>
                   </div>
