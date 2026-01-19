@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { generateMetadata } from '@/lib/metadata';
+import { generateServiceSchema, generateFAQPageSchema, generateBreadcrumbSchema } from '@/lib/schema-generators';
+import { siteConfig } from '@/lib/seo-config';
 import Header from '@/components/ui/header';
 import Footer from '@/components/ui/footer';
 import SectionContainer from '@/components/ui/section-container';
@@ -76,8 +78,72 @@ const services = [
 ];
 
 export default function ServicesPage() {
+  // Generate Service schemas for each service
+  const serviceSchemas = services.map((service) =>
+    generateServiceSchema(
+      service.title,
+      service.description,
+      service.title
+    )
+  );
+
+  // Generate FAQPage schema
+  const faqSchema = generateFAQPageSchema([
+    {
+      question: 'What web development technologies do you use?',
+      answer: 'We specialize in modern web technologies including React, Next.js, TypeScript, and Node.js. We build responsive, performant web applications with SEO best practices and progressive web app capabilities.',
+    },
+    {
+      question: 'Do you develop native or cross-platform mobile apps?',
+      answer: 'We develop both native iOS/Android applications and cross-platform solutions using React Native and Flutter. We choose the best approach based on your project requirements, timeline, and budget.',
+    },
+    {
+      question: 'What is included in your UI/UX design services?',
+      answer: 'Our UI/UX design services include user research, wireframing, prototyping, visual design, design systems creation, accessibility compliance (WCAG), and usability testing. We use tools like Figma, Adobe XD, and Framer.',
+    },
+    {
+      question: 'How long does a typical project take?',
+      answer: 'Project timelines vary based on scope and complexity. A typical web application takes 8-16 weeks, while mobile apps range from 12-24 weeks. We provide detailed timelines during our initial consultation.',
+    },
+    {
+      question: 'Do you provide ongoing support and maintenance?',
+      answer: 'Yes, we offer ongoing support and maintenance packages. This includes bug fixes, security updates, performance optimization, feature enhancements, and technical support.',
+    },
+    {
+      question: 'What is your development process?',
+      answer: 'We follow an agile methodology with four main phases: Discovery (understanding your needs), Design (creating intuitive experiences), Development (building with quality), and Deployment (launching and support).',
+    },
+  ]);
+
+  // Generate BreadcrumbList schema
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: siteConfig.url },
+    { name: 'Services', url: `${siteConfig.url}/services` },
+  ]);
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+      {serviceSchemas.map((schema, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(schema),
+          }}
+        />
+      ))}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema),
+        }}
+      />
       <Header />
       <main className="min-h-screen">
         <SectionContainer id="services-hero" className="pt-32 pb-20">
@@ -108,8 +174,17 @@ export default function ServicesPage() {
                   </h2>
                   <p className="text-lg font-light text-white/70 leading-relaxed mb-6">
                     {service.description}
+                    {index === 0 && (
+                      <> See our <Link href="/projects/voiceventure-ai" className="text-white underline hover:text-white/70">VoiceVenture AI</Link> and <Link href="/projects/esplit" className="text-white underline hover:text-white/70">Esplit</Link> projects for examples.</>
+                    )}
+                    {index === 1 && (
+                      <> Check out <Link href="/projects/spacel" className="text-white underline hover:text-white/70">Spacel</Link> and <Link href="/projects/voiceventure-ai" className="text-white underline hover:text-white/70">VoiceVenture AI</Link> mobile apps.</>
+                    )}
+                    {index === 2 && (
+                      <> Explore our design work in <Link href="/projects/project-sync" className="text-white underline hover:text-white/70">Project Sync</Link> and <Link href="/projects" className="text-white underline hover:text-white/70">other projects</Link>.</>
+                    )}
                   </p>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-4">
                     {service.tech.map((tech) => (
                       <span 
                         key={tech}
@@ -119,6 +194,12 @@ export default function ServicesPage() {
                       </span>
                     ))}
                   </div>
+                  <Link
+                    href="/contact"
+                    className="inline-block text-sm font-light text-white/60 hover:text-white underline"
+                  >
+                    Get a quote for {service.title} →
+                  </Link>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   {service.features.map((feature) => (

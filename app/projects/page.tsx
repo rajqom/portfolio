@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 import { generateMetadata } from '@/lib/metadata';
+import { generateBreadcrumbSchema, generateItemListSchema } from '@/lib/schema-generators';
+import { siteConfig } from '@/lib/seo-config';
 import Header from '@/components/ui/header';
 import Footer from '@/components/ui/footer';
-import SectionContainer, { SectionHeading } from '@/components/ui/section-container';
+import SectionContainer from '@/components/ui/section-container';
 import { projects } from '@/lib/projects-data';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,8 +25,36 @@ export const metadata: Metadata = generateMetadata({
 });
 
 export default function ProjectsPage() {
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: siteConfig.url },
+    { name: 'Projects', url: `${siteConfig.url}/projects` },
+  ]);
+
+  const itemListSchema = generateItemListSchema(
+    'Zynra Studio Portfolio',
+    'A curated selection of our most impactful work, demonstrating our commitment to engineering excellence and thoughtful design.',
+    projects.map((project) => ({
+      name: project.title,
+      description: project.description,
+      url: `${siteConfig.url}/projects/${project.slug}`,
+      image: project.image.startsWith('http') ? project.image : `${siteConfig.url}${project.image}`,
+    }))
+  );
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(itemListSchema),
+        }}
+      />
       <Header />
       <main className="min-h-screen">
         <SectionContainer id="projects-hero" className="pt-32 pb-12">

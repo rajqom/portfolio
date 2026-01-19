@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { generateMetadata } from '@/lib/metadata';
+import { generateBreadcrumbSchema, generateContactPageSchema } from '@/lib/schema-generators';
+import { siteConfig } from '@/lib/seo-config';
 import Header from '@/components/ui/header';
 import Footer from '@/components/ui/footer';
 import SectionContainer from '@/components/ui/section-container';
@@ -20,8 +22,27 @@ export const metadata: Metadata = generateMetadata({
 });
 
 export default function ContactPage() {
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: siteConfig.url },
+    { name: 'Contact', url: `${siteConfig.url}/contact` },
+  ]);
+
+  const contactPageSchema = generateContactPageSchema();
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(contactPageSchema),
+        }}
+      />
       <Header />
       <main className="min-h-screen">
         <SectionContainer id="contact-hero" className="pt-32 pb-20">

@@ -4,6 +4,7 @@ import SectionContainer, { SectionHeading } from './section-container';
 import { Quote, Play, User, Star } from 'lucide-react';
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const textTestimonials = [
   {
@@ -58,15 +59,19 @@ export default function TestimonialsSection() {
             viewport={{ once: true }}
             className="video-testimonial group relative aspect-video w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.02] backdrop-blur-xl transition-all duration-700 hover:border-white/20 shadow-2xl shadow-black/50"
           >
-            <img
+            <Image
               src={videoTestimonial.thumbnail}
               alt={videoTestimonial.name}
-              className="h-full w-full object-cover opacity-60 transition-transform duration-1000 group-hover:scale-105"
+              fill
+              className="object-cover opacity-60 transition-transform duration-1000 group-hover:scale-105"
             />
             
             {/* Play Button Overlay */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <button className="flex h-20 w-20 items-center justify-center rounded-full bg-white text-black transition-all duration-500 hover:scale-110 group-hover:bg-white/90 shadow-2xl shadow-white/20">
+              <button 
+                className="flex h-20 w-20 items-center justify-center rounded-full bg-white text-black transition-all duration-500 hover:scale-110 group-hover:bg-white/90 shadow-2xl shadow-white/20"
+                aria-label={`Play video testimonial from ${videoTestimonial.name}, ${videoTestimonial.role}`}
+              >
                 <Play size={24} className="ml-1" />
               </button>
             </div>
@@ -83,7 +88,7 @@ export default function TestimonialsSection() {
                     <User className="text-white/40" size={20} />
                   </div>
                   <div>
-                    <h4 className="text-base font-light tracking-tight text-white">{videoTestimonial.name}</h4>
+                    <p className="text-base font-light tracking-tight text-white">{videoTestimonial.name}</p>
                     <p className="text-xs font-light tracking-widest uppercase text-white/40">{videoTestimonial.role}</p>
                   </div>
                 </div>
@@ -121,7 +126,7 @@ export default function TestimonialsSection() {
                   <User className="text-white/20" size={16} />
                 </div>
                 <div className="space-y-0.5">
-                  <h4 className="text-sm font-light tracking-tight text-white">{testimonial.name}</h4>
+                  <p className="text-sm font-light tracking-tight text-white">{testimonial.name}</p>
                   <p className="text-[10px] font-light uppercase tracking-widest text-white/30">{testimonial.role}</p>
                 </div>
               </div>

@@ -1,5 +1,3 @@
-import { Building2, Globe, Cpu, LucideIcon } from 'lucide-react';
-
 export interface Project {
   title: string;
   slug: string;

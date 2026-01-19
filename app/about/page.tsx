@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
 import { generateMetadata } from '@/lib/metadata';
+import { generateBreadcrumbSchema } from '@/lib/schema-generators';
+import { siteConfig } from '@/lib/seo-config';
 import Header from '@/components/ui/header';
 import Footer from '@/components/ui/footer';
 import SectionContainer from '@/components/ui/section-container';
 import TeamSection from '@/components/ui/team-section';
+import Link from 'next/link';
 
 export const metadata: Metadata = generateMetadata({
   title: 'About Us',
@@ -20,8 +23,19 @@ export const metadata: Metadata = generateMetadata({
 });
 
 export default function AboutPage() {
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: 'Home', url: siteConfig.url },
+    { name: 'About', url: `${siteConfig.url}/about` },
+  ]);
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
+        }}
+      />
       <Header />
       <main className="min-h-screen">
         <SectionContainer id="about-hero" className="pt-32 pb-20">
@@ -56,27 +70,39 @@ export default function AboutPage() {
               <div className="grid gap-6 md:grid-cols-2">
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
                   <h3 className="text-xl font-light text-white mb-3">Web Development</h3>
-                  <p className="text-white/60 font-light">
+                  <p className="text-white/60 font-light mb-3">
                     Building responsive, performant web applications using modern frameworks and best practices.
                   </p>
+                  <Link href="/services#services-hero" className="text-sm text-white/80 hover:text-white underline">
+                    Learn more about our services →
+                  </Link>
                 </div>
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
                   <h3 className="text-xl font-light text-white mb-3">Mobile Apps</h3>
-                  <p className="text-white/60 font-light">
+                  <p className="text-white/60 font-light mb-3">
                     Creating native and cross-platform mobile experiences that users love.
                   </p>
+                  <Link href="/projects/spacel" className="text-sm text-white/80 hover:text-white underline">
+                    See our mobile app projects →
+                  </Link>
                 </div>
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
                   <h3 className="text-xl font-light text-white mb-3">UI/UX Design</h3>
-                  <p className="text-white/60 font-light">
+                  <p className="text-white/60 font-light mb-3">
                     Crafting intuitive interfaces that prioritize user experience and accessibility.
                   </p>
+                  <Link href="/services" className="text-sm text-white/80 hover:text-white underline">
+                    View design services →
+                  </Link>
                 </div>
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/10">
                   <h3 className="text-xl font-light text-white mb-3">Consulting</h3>
-                  <p className="text-white/60 font-light">
+                  <p className="text-white/60 font-light mb-3">
                     Providing technical guidance and strategic planning for your digital initiatives.
                   </p>
+                  <Link href="/contact" className="text-sm text-white/80 hover:text-white underline">
+                    Schedule a consultation →
+                  </Link>
                 </div>
               </div>
             </div>

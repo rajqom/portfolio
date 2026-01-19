@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
@@ -27,9 +27,10 @@ export default function Header() {
       gsap.from(headerRef.current, {
         y: -20,
         opacity: 0,
-        duration: 1,
-        ease: 'power4.out',
-        delay: 0.2,
+        duration: 0.6,
+        ease: 'power3.out',
+        force3D: true, // Force GPU acceleration
+        delay: 0.1,
       });
     },
     { scope: headerRef }
@@ -88,7 +89,7 @@ export default function Header() {
   return (
     <header
       ref={headerRef}
-      className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-white/5"
+      className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-xl border-b border-white/5 will-change-transform"
     >
       <nav className="mx-auto flex h-16 lg:h-20 max-w-7xl items-center justify-between px-6 md:px-10 lg:px-16">
         {/* Logo */}

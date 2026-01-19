@@ -71,7 +71,7 @@ export default function ProjectsSection() {
       <div ref={containerRef} className="space-y-24 lg:space-y-32">
         {/* Featured Companies Section */}
         <div className="flex flex-col items-center gap-10">
-          <p className="text-[10px] font-light uppercase tracking-[0.2em] text-white/40">
+          <p className="text-[10px] font-light uppercase tracking-[0.2em] text-white/60">
             Collaborated with & Trusted By
           </p>
           <div className="flex flex-wrap justify-center gap-12 md:gap-24 opacity-60 grayscale hover:opacity-100 hover:grayscale-0">
@@ -125,12 +125,18 @@ export default function ProjectsSection() {
                     <a
                       href={project.demoUrl}
                       className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-black hover:scale-110"
+                      aria-label={`View live demo of ${project.title}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <ExternalLink size={20} />
                     </a>
                     <a
                       href={project.codeUrl}
                       className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/20 bg-black/40 text-white backdrop-blur-md hover:bg-white/10 hover:scale-110"
+                      aria-label={`View source code for ${project.title}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
                       <Github size={20} />
                     </a>
@@ -169,6 +175,7 @@ export default function ProjectsSection() {
                   <Link
                     href={`/projects/${project.slug}`}
                     className="inline-flex items-center gap-2 text-sm font-light tracking-tight text-white/40 group-hover:text-white group-hover:gap-3"
+                    aria-label={`Explore case study for ${project.title}`}
                   >
                     Explore Case Study
                     <ArrowRight size={14} />

@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from "react";
-import Cal, { getCalApi } from "@calcom/embed-react";
+import { useRef } from "react";
+import CalEmbedLazy from './cal-embed-lazy';
 import SectionContainer, { SectionHeading } from './section-container';
 import { Mail, Github, Linkedin, Twitter } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
@@ -41,13 +41,6 @@ export default function ContactSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const calContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    (async function () {
-      const cal = await getCalApi({"namespace":"30min"});
-      cal("ui", {"hideEventTypeDetails":false,"layout":"month_view"});
-    })();
-  }, []);
-
   useGSAP(
     () => {
       if (!containerRef.current) return;
@@ -55,8 +48,9 @@ export default function ContactSection() {
       gsap.from(calContainerRef.current, {
         opacity: 0,
         y: 30,
-        duration: 1,
-        ease: 'power3.out',
+        duration: 0.6,
+        ease: 'power2.out',
+        force3D: true, // Force GPU acceleration
         scrollTrigger: {
           trigger: calContainerRef.current,
           start: 'top 85%',
@@ -68,8 +62,9 @@ export default function ContactSection() {
         opacity: 0,
         y: 20,
         stagger: 0.1,
-        duration: 0.8,
-        ease: 'power3.out',
+        duration: 0.5,
+        ease: 'power2.out',
+        force3D: true, // Force GPU acceleration
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top 90%',
@@ -88,7 +83,7 @@ export default function ContactSection() {
       <SectionHeading
         badge="Connect"
         title="Start a Conversation"
-        subtitle="Schedule a meeting or reach out through your preferred platform. I'm always open to discussing new projects and opportunities."
+        subtitle="Schedule a meeting or reach out through your preferred platform. We're always open to discussing new projects and opportunities."
       />
 
       <div ref={containerRef} className="mx-auto max-w-5xl space-y-16">
@@ -100,13 +95,11 @@ export default function ContactSection() {
           {/* Calendar Header Overlay */}
           <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
           
-          <div className="min-h-[600px] w-full">
-            <Cal namespace="30min"
-              calLink="zynra.studio/30min"
-              style={{width:"100%",height:"100%",overflow:"scroll"}}
-              config={{"layout":"month_view"}}
-            />
-          </div>
+          <CalEmbedLazy
+            namespace="30min"
+            calLink="zynra.studio/30min"
+            config={{ layout: "month_view" }}
+          />
         </div>
 
         {/* Contact Methods Grid */}

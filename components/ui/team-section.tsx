@@ -3,6 +3,7 @@
 import SectionContainer, { SectionHeading } from './section-container';
 import { Github, Linkedin, Twitter } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const teamMembers = [
   {
@@ -58,10 +59,11 @@ export default function TeamSection() {
           >
             {/* Avatar Container */}
             <div className="relative mb-6 w-full aspect-square max-w-[280px] overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.02] backdrop-blur-xl transition-all duration-700 group-hover:border-white/20 group-hover:scale-[1.02] shadow-2xl shadow-black/50">
-              <img
+              <Image
                 src={member.avatar}
                 alt={member.name}
-                className="h-full w-full object-cover grayscale opacity-70 transition-all duration-700 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110"
+                fill
+                className="object-cover grayscale opacity-70 transition-all duration-700 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110"
               />
               
               {/* Social Overlay */}

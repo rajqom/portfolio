@@ -26,29 +26,6 @@ const footerLinks = {
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    // Only handle hash links
-    if (href.startsWith('#') || href.includes('/#')) {
-      e.preventDefault();
-      
-      // Extract the hash from the href
-      const hash = href.includes('/#') ? href.split('/#')[1] : href.substring(1);
-      const element = document.querySelector(`#${hash}`);
-      
-      if (element) {
-        const offset = 80;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth',
-        });
-      }
-    }
-    // For regular routes, let Next.js handle navigation
-  };
-
   return (
     <footer className="relative w-full bg-black border-t border-white/5 overflow-hidden">
       <div className="mx-auto max-w-7xl px-6 py-12 md:px-10 lg:px-16">
@@ -58,7 +35,7 @@ export default function Footer() {
             <h2 className="text-lg font-light tracking-tighter text-white">
               Zynra <span className="font-extralight text-white/50">Studio</span>
             </h2>
-            <p className="text-[10px] font-extralight uppercase tracking-[0.2em] text-white/30">
+            <p className="text-[10px] font-extralight uppercase tracking-[0.2em] text-white/50">
               © {currentYear} — All Rights Reserved.
             </p>
           </div>

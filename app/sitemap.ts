@@ -1,15 +1,52 @@
 import { MetadataRoute } from 'next';
 import { siteConfig } from '@/lib/seo-config';
+import { projects } from '@/lib/projects-data';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const routes = ['', '/about', '/services', '/contact', '/projects'].map(
-    (route) => ({
-      url: `${siteConfig.url}${route}`,
-      lastModified: new Date().toISOString(),
-      changeFrequency: route === '' ? ('daily' as const) : ('weekly' as const),
-      priority: route === '' ? 1 : 0.8,
-    })
-  );
+  const baseUrl = siteConfig.url;
+  const now = new Date().toISOString();
 
-  return routes;
+  // Static routes
+  const staticRoutes: MetadataRoute.Sitemap = [
+    {
+      url: baseUrl,
+      lastModified: now,
+      changeFrequency: 'daily',
+      priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/services`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/projects`,
+      lastModified: now,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+  ];
+
+  // Dynamic project routes
+  const projectRoutes: MetadataRoute.Sitemap = projects.map((project) => ({
+    url: `${baseUrl}/projects/${project.slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
+
+  return [...staticRoutes, ...projectRoutes];
 }

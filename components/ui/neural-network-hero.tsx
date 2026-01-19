@@ -30,6 +30,7 @@ function HeroBackground() {
         repeat: -1,
         yoyo: true,
         ease: 'sine.inOut',
+        force3D: true, // Force GPU acceleration
         stagger: {
           each: 2,
           from: 'random',
@@ -42,9 +43,9 @@ function HeroBackground() {
   return (
     <div ref={containerRef} className="absolute inset-0 overflow-hidden bg-black" aria-hidden="true">
       {/* Dynamic atmospheric spots */}
-      <div className="bg-spot absolute left-[10%] top-[20%] h-[500px] w-[500px] rounded-full bg-purple-500/10 blur-[120px]" />
-      <div className="bg-spot absolute right-[10%] top-[10%] h-[400px] w-[400px] rounded-full bg-blue-500/10 blur-[100px]" />
-      <div className="bg-spot absolute bottom-[10%] left-[20%] h-[600px] w-[600px] rounded-full bg-indigo-500/5 blur-[150px]" />
+      <div className="bg-spot absolute left-[10%] top-[20%] h-[500px] w-[500px] rounded-full bg-purple-500/10 blur-[120px] will-change-transform" />
+      <div className="bg-spot absolute right-[10%] top-[10%] h-[400px] w-[400px] rounded-full bg-blue-500/10 blur-[100px] will-change-transform" />
+      <div className="bg-spot absolute bottom-[10%] left-[20%] h-[600px] w-[600px] rounded-full bg-indigo-500/5 blur-[150px] will-change-transform" />
       
       {/* Subtle Grid Pattern */}
       <div 
@@ -86,40 +87,51 @@ export default function Hero({
     () => {
       if (!headerRef.current) return;
 
-      const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+      // Set LCP element (description) to visible immediately for faster LCP
+      if (paraRef.current) {
+        gsap.set(paraRef.current, { opacity: 1, y: 0 });
+      }
+
+      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
       tl.from(badgeRef.current, {
-        y: -20,
+        y: -10,
         opacity: 0,
-        duration: 1,
-      }, 0.2);
+        duration: 0.4,
+        force3D: true,
+      }, 0);
 
+      // Optimize header animation for faster LCP
       tl.from(headerRef.current, {
-        y: 40,
-        opacity: 0,
-        filter: 'blur(15px)',
-        duration: 1.2,
-      }, 0.3);
-
-      tl.from(paraRef.current, {
         y: 20,
         opacity: 0,
-        duration: 1,
-      }, '-=0.8');
+        duration: 0.5,
+        force3D: true,
+      }, 0);
+
+      // LCP element - minimal animation, already visible
+      tl.from(paraRef.current, {
+        y: 10,
+        opacity: 0.5, // Start partially visible
+        duration: 0.4,
+        force3D: true,
+      }, 0.1);
 
       tl.from(ctaRef.current, {
         y: 20,
         opacity: 0,
-        duration: 1,
-      }, '-=0.7');
+        duration: 0.6,
+        force3D: true,
+      }, '-=0.4');
 
       const microItems = [microItem1Ref.current, microItem2Ref.current, microItem3Ref.current].filter(Boolean);
       tl.from(microItems, {
         y: 10,
         opacity: 0,
         stagger: 0.1,
-        duration: 0.8,
-      }, '-=0.6');
+        duration: 0.5,
+        force3D: true,
+      }, '-=0.3');
     },
     { scope: sectionRef },
   );
@@ -136,11 +148,11 @@ export default function Hero({
             <span className="text-[11px] font-light tracking-tight text-white/80">{badgeText}</span>
           </div>
 
-          <h1 ref={headerRef} className="text-left text-5xl font-extralight leading-[1.1] tracking-tighter text-white sm:text-7xl md:text-8xl">
+          <h1 ref={headerRef} className="text-left text-5xl font-extralight leading-[1.1] tracking-tighter text-white sm:text-7xl md:text-8xl will-change-transform">
             {title}
           </h1>
 
-          <p ref={paraRef} className="max-w-2xl text-left text-lg font-light leading-relaxed tracking-tight text-white/60 sm:text-xl">
+          <p ref={paraRef} className="max-w-2xl text-left text-lg font-light leading-relaxed tracking-tight text-white/60 sm:text-xl will-change-transform" style={{ opacity: 1 }}>
             {description}
           </p>
 

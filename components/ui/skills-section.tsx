@@ -15,6 +15,7 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Link from 'next/link';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -135,9 +136,16 @@ export default function SkillsSection() {
                     {spec.title}
                   </h3>
                   
-                  <p className="mb-8 text-base font-light leading-relaxed text-white/70 lg:max-w-[80%]">
+                  <p className="mb-6 text-base font-light leading-relaxed text-white/70 lg:max-w-[80%]">
                     {spec.description}
                   </p>
+                  
+                  <Link
+                    href="/services"
+                    className="mb-6 inline-block text-sm font-light text-white/60 hover:text-white underline"
+                  >
+                    Learn more about {spec.title} →
+                  </Link>
                   
                   <div className="flex flex-wrap gap-2">
                     {spec.skills.map((skill, skillIndex) => (

@@ -1,15 +1,56 @@
+import type { Metadata } from 'next';
+import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
+import { generateWebSiteSchema } from '@/lib/schema-generators';
+import dynamic from 'next/dynamic';
 import Hero from "@/components/ui/neural-network-hero";
 import Header from "@/components/ui/header";
-import AboutSection from "@/components/ui/about-section";
-import SkillsSection from "@/components/ui/skills-section";
-import ProjectsSection from "@/components/ui/projects-section";
-import TestimonialsSection from "@/components/ui/testimonials-section";
-import ContactSection from "@/components/ui/contact-section";
 import Footer from "@/components/ui/footer";
 
+// Lazy load below-the-fold components for better initial page load
+const AboutSection = dynamic(() => import("@/components/ui/about-section"), {
+  loading: () => <div className="min-h-[400px]" />,
+});
+const SkillsSection = dynamic(() => import("@/components/ui/skills-section"), {
+  loading: () => <div className="min-h-[400px]" />,
+});
+const ProjectsSection = dynamic(() => import("@/components/ui/projects-section"), {
+  loading: () => <div className="min-h-[600px]" />,
+});
+const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section"), {
+  loading: () => <div className="min-h-[400px]" />,
+});
+const ContactSection = dynamic(() => import("@/components/ui/contact-section"), {
+  loading: () => <div className="min-h-[400px]" />,
+});
+
+export const metadata: Metadata = generatePageMetadata({
+  title: 'Zynra Studio - Web & Mobile Development Agency | Custom Digital Solutions',
+  description: 'Zynra Studio is a modern web and mobile development agency specializing in building elegant, scalable digital solutions. We transform ideas into powerful applications with React, Next.js, and cutting-edge technologies.',
+  path: '/',
+  keywords: [
+    'web development agency',
+    'mobile app development',
+    'custom web applications',
+    'React development',
+    'Next.js development',
+    'UI/UX design agency',
+    'full-stack development',
+    'software development company',
+    'digital solutions',
+  ],
+});
+
 export default function Home() {
+  const websiteSchema = generateWebSiteSchema();
+  
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(websiteSchema),
+        }}
+      />
       <Header />
       <main>
         <Hero 

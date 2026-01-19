@@ -4,7 +4,7 @@ export const siteConfig = {
   name: 'Zynra Studio',
   description: 'Zynra Studio is a modern web and mobile development agency specializing in building elegant, scalable digital solutions. We transform ideas into powerful applications.',
   url: 'https://zynra.studio',
-  ogImage: 'https://zynra.studio/og-image.png',
+  ogImage: 'https://zynra.studio/logo-og.svg', // TODO: Replace with og-image.png (1200x630px) when ready
   keywords: [
     'web development agency',
     'mobile app development',

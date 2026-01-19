@@ -4,6 +4,19 @@ import { useMotionValueEvent, useScroll } from "motion/react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
+// Constants moved outside component to prevent re-creation on every render
+const BACKGROUND_COLORS = [
+  "#0f172a", // slate-900
+  "#000000", // black
+  "#171717", // neutral-900
+];
+
+const LINEAR_GRADIENTS = [
+  "linear-gradient(to bottom right, #06b6d4, #10b981)", // cyan-500 to emerald-500
+  "linear-gradient(to bottom right, #ec4899, #6366f1)", // pink-500 to indigo-500
+  "linear-gradient(to bottom right, #f97316, #eab308)", // orange-500 to yellow-500
+];
+
 export const StickyScroll = ({
   content,
   contentClassName,
@@ -40,26 +53,12 @@ export const StickyScroll = ({
     setActiveCard(closestBreakpointIndex);
   });
 
-  const backgroundColors = [
-    "#0f172a", // slate-900
-    "#000000", // black
-    "#171717", // neutral-900
-  ];
-  const linearGradients = [
-    "linear-gradient(to bottom right, #06b6d4, #10b981)", // cyan-500 to emerald-500
-    "linear-gradient(to bottom right, #ec4899, #6366f1)", // pink-500 to indigo-500
-    "linear-gradient(to bottom right, #f97316, #eab308)", // orange-500 to yellow-500
-  ];
-
-  const backgroundGradient = React.useMemo(
-    () => linearGradients[activeCard % linearGradients.length],
-    [activeCard]
-  );
+  const backgroundGradient = LINEAR_GRADIENTS[activeCard % LINEAR_GRADIENTS.length];
 
   return (
     <motion.div
       animate={{
-        backgroundColor: backgroundColors[activeCard % backgroundColors.length],
+        backgroundColor: BACKGROUND_COLORS[activeCard % BACKGROUND_COLORS.length],
       }}
       className="relative flex h-[30rem] justify-center space-x-10 overflow-y-auto rounded-md p-10"
       ref={ref}
