@@ -6,6 +6,7 @@ export interface Project {
   fullDescription: string;
   image: string;
   videoUrl?: string;
+  videoId?: string;
   tags: string[];
   impact: string;
   demoUrl: string;
@@ -20,13 +21,13 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    title: 'Voiceventure AI',
+    title: 'VoiceVenture AI',
     slug: 'voiceventure-ai',
     category: 'AI Agents & Automation',
     description: 'Reclaim 5–7 hours per staff member, every week. AI Co-Workers handle K-12 SPED documentation, HR workflows, and compliance—through simple conversation.',
     fullDescription: 'We built a comprehensive ecosystem for VoiceVenture AI, including a high-converting marketing website, a robust web application for administrative tasks, and a mobile app for on-the-go documentation. The platform utilizes advanced AI agents to automate tedious K-12 administrative workflows, ensuring compliance and efficiency.',
     image: '/image/portfolio/voiceventure.PNG',
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', // Placeholder video
+    videoId: '1156069133',
     tags: ['Next.js', 'React Native', 'OpenAI', 'Tailwind CSS', 'Node.js', 'PostgreSQL'],
     impact: 'Reclaimed 5-7 hrs/week per staff',
     demoUrl: 'https://www.voiceventure.ai/',

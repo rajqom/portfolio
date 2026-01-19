@@ -59,8 +59,8 @@ export default function Home() {
           badgeText="Available for Projects"
           badgeLabel="Open"
           ctaButtons={[
-            { text: "View Our Work", href: "/projects", primary: true },
-            { text: "Book a Call", href: "/contact" }
+            { text: "Book a Call", href: "/contact", primary: true },
+            { text: "Get a Quote", href: "/services" }
           ]}
           microDetails={["Web Development", "Mobile Apps", "UI/UX Design"]}
         />

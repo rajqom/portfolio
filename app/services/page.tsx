@@ -6,6 +6,7 @@ import Header from '@/components/ui/header';
 import Footer from '@/components/ui/footer';
 import SectionContainer from '@/components/ui/section-container';
 import Link from 'next/link';
+import { QuoteDialog } from '@/components/ui/quote-dialog';
 
 export const metadata: Metadata = generateMetadata({
   title: 'Our Services',
@@ -194,12 +195,11 @@ export default function ServicesPage() {
                       </span>
                     ))}
                   </div>
-                  <Link
-                    href="/contact"
-                    className="inline-block text-sm font-light text-white/60 hover:text-white underline"
-                  >
-                    Get a quote for {service.title} →
-                  </Link>
+                  <QuoteDialog service={service.title}>
+                    <button className="inline-block text-sm font-light text-white/60 hover:text-white underline">
+                      Get a quote for {service.title} →
+                    </button>
+                  </QuoteDialog>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   {service.features.map((feature) => (

@@ -1,10 +1,10 @@
 'use client';
 
 import SectionContainer, { SectionHeading } from './section-container';
-import { Quote, Play, User, Star } from 'lucide-react';
-import { useRef } from 'react';
+import { Quote, User, Star } from 'lucide-react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import Image from 'next/image';
+import VimeoEmbed from './vimeo-embed';
 
 const textTestimonials = [
   {
@@ -30,12 +30,13 @@ const textTestimonials = [
 const videoTestimonial = {
   name: 'Rafael Richardson',
   role: 'CEO at VoiceVenture AI',
-  thumbnail: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=800&h=450&fit=crop',
-  quote: "Zynra Studio's technical expertise was exactly what we needed. They built our complete ecosystem—website, web app, and mobile app—helping us reclaim 5-7 hours per staff member every week.",
+  videoId: '1156069133',
+  quote: "It been a wonderful experience working with Zynra Studio",
 };
 
 export default function TestimonialsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   return (
     <SectionContainer id="testimonials" variant="dark" animate={false}>
@@ -57,27 +58,21 @@ export default function TestimonialsSection() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true }}
-            className="video-testimonial group relative aspect-video w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.02] backdrop-blur-xl transition-all duration-700 hover:border-white/20 shadow-2xl shadow-black/50"
+            className="video-testimonial group relative w-full overflow-hidden rounded-[2.5rem] border border-white/10 bg-white/[0.02] backdrop-blur-xl transition-all duration-700 hover:border-white/20 shadow-2xl shadow-black/50"
           >
-            <Image
-              src={videoTestimonial.thumbnail}
-              alt={videoTestimonial.name}
-              fill
-              className="object-cover opacity-60 transition-transform duration-1000 group-hover:scale-105"
+            <VimeoEmbed 
+              videoId={videoTestimonial.videoId}
+              className="rounded-[2.5rem]"
+              title={`Video testimonial from ${videoTestimonial.name}, ${videoTestimonial.role}`}
+              onPlay={() => setIsVideoPlaying(true)}
             />
-            
-            {/* Play Button Overlay */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <button 
-                className="flex h-20 w-20 items-center justify-center rounded-full bg-white text-black transition-all duration-500 hover:scale-110 group-hover:bg-white/90 shadow-2xl shadow-white/20"
-                aria-label={`Play video testimonial from ${videoTestimonial.name}, ${videoTestimonial.role}`}
-              >
-                <Play size={24} className="ml-1" />
-              </button>
-            </div>
 
             {/* Quote Overlay */}
-            <div className="absolute inset-x-0 bottom-0 p-8 lg:p-12 bg-gradient-to-t from-black via-black/60 to-transparent">
+            <div 
+              className={`absolute inset-x-0 bottom-0 p-8 lg:p-12 bg-gradient-to-t from-black via-black/60 to-transparent pointer-events-none transition-opacity duration-500 ${
+                isVideoPlaying ? 'opacity-0' : 'opacity-100'
+              }`}
+            >
               <div className="space-y-4">
                 <Quote className="text-white/20" size={32} />
                 <p className="text-xl md:text-2xl font-light leading-relaxed tracking-tight text-white italic">

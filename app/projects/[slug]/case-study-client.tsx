@@ -13,6 +13,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/ui/header';
 import Footer from '@/components/ui/footer';
+import VimeoEmbed from '@/components/ui/vimeo-embed';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -197,20 +198,30 @@ export default function CaseStudyClient({ project }: CaseStudyClientProps) {
         </div>
 
         {/* Founder Video Review */}
-        {project.videoUrl && (
+        {(project.videoId || project.videoUrl) && (
           <div className="section-animate space-y-12">
             <div className="flex flex-col items-center gap-4">
               <h2 className="text-xl font-light tracking-tight text-white/40 uppercase tracking-[0.2em]">Founder Review</h2>
               <div className="h-px w-12 bg-white/10" />
             </div>
-            <div className="relative mx-auto max-w-4xl aspect-video rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/[0.02] shadow-2xl">
-              <iframe
-                src={project.videoUrl}
-                title={`Founder review for ${project.title}`}
-                className="absolute inset-0 w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+            <div className="relative mx-auto max-w-4xl rounded-[2.5rem] overflow-hidden border border-white/10 bg-white/[0.02] shadow-2xl">
+              {project.videoId ? (
+                <VimeoEmbed
+                  videoId={project.videoId}
+                  className="rounded-[2.5rem]"
+                  title={`Founder review for ${project.title}`}
+                />
+              ) : (
+                <div className="relative aspect-video">
+                  <iframe
+                    src={project.videoUrl}
+                    title={`Founder review for ${project.title}`}
+                    className="absolute inset-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+              )}
             </div>
           </div>
         )}
