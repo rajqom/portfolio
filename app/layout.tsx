@@ -41,6 +41,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Favicon links for Google Search - must be in head for proper crawling */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        
         {/* Resource hints for performance */}
         <link rel="preconnect" href="https://app.cal.com" />
         <link rel="dns-prefetch" href="https://app.cal.com" />

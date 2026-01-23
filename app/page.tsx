@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { generateMetadata as generatePageMetadata } from '@/lib/metadata';
-import { generateWebSiteSchema } from '@/lib/schema-generators';
+import { generateWebSiteSchema, generateFAQPageSchema } from '@/lib/schema-generators';
+import { faqs } from '@/lib/faq-data';
 import dynamic from 'next/dynamic';
 import Hero from "@/components/ui/neural-network-hero";
 import Header from "@/components/ui/header";
@@ -17,6 +18,9 @@ const ProjectsSection = dynamic(() => import("@/components/ui/projects-section")
   loading: () => <div className="min-h-[600px]" />,
 });
 const TestimonialsSection = dynamic(() => import("@/components/ui/testimonials-section"), {
+  loading: () => <div className="min-h-[400px]" />,
+});
+const FAQSection = dynamic(() => import("@/components/ui/faq-section"), {
   loading: () => <div className="min-h-[400px]" />,
 });
 const ContactSection = dynamic(() => import("@/components/ui/contact-section"), {
@@ -42,6 +46,7 @@ export const metadata: Metadata = generatePageMetadata({
 
 export default function Home() {
   const websiteSchema = generateWebSiteSchema();
+  const faqSchema = generateFAQPageSchema(faqs);
   
   return (
     <>
@@ -49,6 +54,12 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(websiteSchema),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(faqSchema),
         }}
       />
       <Header />
@@ -68,6 +79,7 @@ export default function Home() {
         <SkillsSection />
         <ProjectsSection />
         <TestimonialsSection />
+        <FAQSection />
         <ContactSection />
       </main>
       <Footer />
