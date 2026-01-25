@@ -51,6 +51,16 @@ export async function GET(request: NextRequest) {
     let notion: Client
     try {
       notion = getNotionClient()
+      // Verify client is initialized
+      if (!notion || !notion.databases) {
+        return NextResponse.json(
+          { 
+            error: "Notion client initialization failed",
+            details: "Client object is missing databases property"
+          },
+          { status: 500 }
+        )
+      }
     } catch (error) {
       return NextResponse.json(
         { 
@@ -62,34 +72,48 @@ export async function GET(request: NextRequest) {
     }
 
     // Query the database for recent changes
-    // Note: Using type assertion since TypeScript types may be incomplete
-    const databases = notion.databases as any
-    if (!databases || typeof databases.query !== 'function') {
+    // Using type assertion since TypeScript types don't include query method
+    // This matches the pattern used in scripts/get-template-ids.ts
+    let response
+    try {
+      const databases = notion.databases as any
+      if (!databases) {
+        return NextResponse.json(
+          { 
+            error: "Notion databases API not available",
+            details: "notion.databases is undefined"
+          },
+          { status: 500 }
+        )
+      }
+      
+      response = await databases.query({
+        database_id: databaseId,
+        filter: {
+          property: "Status",
+          select: {
+            is_not_empty: true,
+          },
+        },
+        sorts: [
+          {
+            timestamp: "last_edited_time",
+            direction: "descending",
+          },
+        ],
+        page_size: 20, // Check last 20 items
+      })
+    } catch (queryError) {
+      console.error("❌ Notion query error:", queryError)
       return NextResponse.json(
-        { 
-          error: "Notion client not properly initialized",
-          details: "databases.query method not available. Check NOTION_API_KEY and SDK version."
+        {
+          error: "Failed to query Notion database",
+          details: queryError instanceof Error ? queryError.message : String(queryError),
+          hint: "Check NOTION_API_KEY and database permissions",
         },
         { status: 500 }
       )
     }
-
-    const response = await databases.query({
-      database_id: databaseId,
-      filter: {
-        property: "Status",
-        select: {
-          is_not_empty: true,
-        },
-      },
-      sorts: [
-        {
-          timestamp: "last_edited_time",
-          direction: "descending",
-        },
-      ],
-      page_size: 20, // Check last 20 items
-    })
 
     const changes: Array<{
       pageId: string
@@ -224,9 +248,38 @@ export async function GET(request: NextRequest) {
 
 // Health check
 export async function POST() {
-  return NextResponse.json({
-    status: "healthy",
-    message: "Notion polling service is running",
-    timestamp: new Date().toISOString(),
-  })
+  try {
+    const hasApiKey = !!process.env.NOTION_API_KEY
+    const hasDatabaseId = !!process.env.NOTION_LEADS_DATABASE_ID
+    const hasWebhookUrl = !!process.env.MAKE_WEBHOOK_URL
+    
+    // Try to initialize client to verify it works
+    let clientInitialized = false
+    let clientError = null
+    try {
+      const testClient = getNotionClient()
+      clientInitialized = !!testClient && !!testClient.databases
+    } catch (error) {
+      clientError = error instanceof Error ? error.message : String(error)
+    }
+    
+    return NextResponse.json({
+      status: "healthy",
+      message: "Notion polling service is running",
+      timestamp: new Date().toISOString(),
+      diagnostics: {
+        hasApiKey,
+        hasDatabaseId,
+        hasWebhookUrl,
+        clientInitialized,
+        clientError,
+      },
+    })
+  } catch (error) {
+    return NextResponse.json({
+      status: "error",
+      message: "Health check failed",
+      error: error instanceof Error ? error.message : String(error),
+    }, { status: 500 })
+  }
 }
