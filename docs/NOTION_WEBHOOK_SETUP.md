@@ -32,38 +32,70 @@ Unified Automation Scenario (single scenario with 7 routes)
 - 💰 Only uses operations when changes occur
 - 🎯 More reliable than polling
 
-## Implementation Options
+## Implementation: Custom Webhook Solution
 
-### Option 1: Make.com Instant Trigger (RECOMMENDED)
+**IMPORTANT**: Make.com's Notion "Watch Database Items" module does NOT support instant webhooks. It only offers polling-based triggers (Created Time/Updated Time) which have 5-15 minute delays.
 
-Make.com now supports instant triggers for Notion databases through their "Watch Database Items" module with instant trigger mode.
+We use a **Custom Webhook Solution** for instant triggers:
 
-**Pros:**
-- ✅ Built-in to Make.com
-- ✅ No custom code needed
-- ✅ Instant notifications
-- ✅ Officially supported
+### Architecture
 
-**Setup Steps:**
+```
+Notion Database (Status Changes)
+    ↓
+Polling Service (/api/poll/notion) - Runs every 10 seconds
+    ↓
+Detects Status Changes
+    ↓
+Forwards to Make.com Custom Webhook
+    ↓
+Unified Automation Scenario (7 Routes)
+```
 
-1. **In Make.com, create a new scenario**
-2. **Add the Notion "Watch Database Items" module**
-   - Connection: Your Notion connection
-   - Choose: "Watch Database Items (instant)"
-   - Database: Select your Leads database
-   - This creates a webhook URL that Make.com registers with Notion
-3. **Make.com automatically sets up the webhook with Notion**
-4. **Continue building your unified scenario** (see Step-by-Step Setup below)
+### Setup Steps
 
-### Option 2: Custom Webhook Receiver (ADVANCED)
+1. **Deploy the Polling Service**
+   - The polling endpoint is at `/api/poll/notion`
+   - Set up a cron job to call it every 10 seconds (see options below)
 
-If you need more control or custom logic before triggering Make.com:
+2. **Create Make.com Custom Webhook**
+   - In Make.com, add "Webhooks > **Custom webhook (INSTANT)**" module
+   - ⚠️ Make sure to select **"Custom webhook (INSTANT)"** - the one that "Triggers when webhook receives data"
+   - ⚠️ **NOT** "Custom mailhook" or "Webhook response"
+   - Copy the generated webhook URL
+   - Add it to environment variable: `MAKE_WEBHOOK_URL`
 
-1. **Deploy this portfolio app** (includes webhook receiver at `/api/webhooks/notion`)
-2. **Set up a polling service** to check for changes (every 5 seconds)
-3. **Forward changes to Make.com** webhook URL
+3. **Configure Environment Variables**
+   ```bash
+   NOTION_API_KEY=your_notion_api_key
+   NOTION_LEADS_DATABASE_ID=ce12e087-e701-4902-ae70-8ff582981d1b
+   MAKE_WEBHOOK_URL=your_make_webhook_url
+   ```
 
-**Note:** This option is more complex and only needed if you require custom pre-processing.
+4. **Set Up Polling** (Choose one):
+
+   **Option A: Vercel Cron Jobs** (Recommended)
+   - Already configured in `vercel.json`
+   - Automatically runs every 10 seconds when deployed to Vercel
+
+   **Option B: External Cron Service**
+   - Use cron-job.org, EasyCron, or similar
+   - Set to call: `https://zynra.studio/api/poll/notion` every 10 seconds
+
+   **Option C: Make.com HTTP Module Loop**
+   - Create a separate Make.com scenario
+   - Use "Schedule" trigger to run every 10 seconds
+   - Add HTTP module to call `/api/poll/notion`
+
+### How It Works
+
+1. Polling service checks Notion database every 10 seconds
+2. Compares current status with last known status (stored in memory)
+3. When status changes detected:
+   - Fetches full page data from Notion
+   - Forwards to Make.com webhook URL
+   - Updates internal status tracking
+4. Make.com receives webhook and triggers automation scenario
 
 ## Step-by-Step: Unified Make.com Scenario Setup
 
@@ -133,25 +165,21 @@ Module 2: Router (7 Routes - based on Status)
 2. Name: **"Unified Client Journey Automation"**
 3. Description: **"Single scenario handling all lead status changes from Qualified through Project Completion, with instant Notion webhook trigger"**
 
-### Step 2: Module 1 - Notion Instant Trigger
+### Step 2: Module 1 - Custom Webhook Trigger
 
 1. **Add Module**: Click "+"
-2. **Search**: "Notion"
-3. **Select**: **"Watch Database Items"**
-4. **Important**: Look for the option to enable "Instant" mode
-   - This may be labeled as "Instant trigger", "Use webhook", or similar
-   - If not visible, ensure you have the latest Make.com Notion integration
-5. **Configure**:
-   - **Connection**: Your Notion connection
-   - **Database**: Select your Leads database (or enter Data Source ID: `ce12e087-e701-4902-ae70-8ff582981d1b`)
-   - **Trigger mode**: Select "Instant" or "Webhook" (NOT polling)
-   - **Limit**: 1 (we process one change at a time)
+2. **Search**: "Webhooks"
+3. **Select**: **"Custom webhook"**
+4. **Configure**:
+   - **Method**: POST
+   - **Data Structure**: JSON
+   - **Copy the webhook URL** - You'll need this for `MAKE_WEBHOOK_URL` environment variable
 
 **What Happens:**
-- Make.com generates a webhook URL
-- Make.com automatically registers this webhook with Notion
-- When any lead status changes, Notion instantly notifies Make.com
-- Your scenario runs immediately (< 1 second delay)
+- Make.com generates a unique webhook URL
+- Polling service forwards status changes to this URL
+- When status changes are detected, webhook triggers immediately (< 1 second delay)
+- Your scenario runs with the webhook payload data
 
 ### Step 3: Module 2 - Router (7 Routes)
 
@@ -301,13 +329,16 @@ LINEAR_TEAM_ID=your_linear_team_id
 
 **Check:**
 1. ✅ Make.com scenario is **ON** (not off)
-2. ✅ Notion integration has access to Leads database
-3. ✅ "Instant" mode is enabled in the Watch module
-4. ✅ Make.com webhook is registered with Notion (check Make.com logs)
+2. ✅ Polling service is running (check `/api/poll/notion` endpoint)
+3. ✅ `MAKE_WEBHOOK_URL` environment variable is set correctly
+4. ✅ Cron job is configured and running (check Vercel logs or cron service)
+5. ✅ Notion API key has access to Leads database
 
 **Fix:**
-- Re-save the Watch Database Items module in Make.com
-- This re-registers the webhook with Notion
+- Test polling endpoint: `GET https://zynra.studio/api/poll/notion`
+- Check Vercel function logs for polling errors
+- Verify `MAKE_WEBHOOK_URL` matches the webhook URL from Make.com
+- Ensure cron job is actually calling the endpoint (check cron service logs)
 
 ### Multiple Scenarios Triggering
 
@@ -322,9 +353,11 @@ LINEAR_TEAM_ID=your_linear_team_id
 **Symptoms**: Webhook triggers but with delay
 
 **Check:**
-- Ensure "Instant" mode is enabled (not polling)
+- Polling interval should be 10 seconds or less
+- Check if cron job is running on schedule
+- Verify no rate limiting on Notion API
 - Check Make.com execution history for queue delays
-- Verify no rate limiting on Make.com account
+- Ensure polling service is detecting changes (check response from `/api/poll/notion`)
 
 ### Specific Route Not Working
 
