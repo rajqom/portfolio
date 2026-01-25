@@ -72,23 +72,31 @@ export async function GET(request: NextRequest) {
     }
 
     // Query the database for recent changes
-    // Using type assertion since TypeScript types don't include query method
-    // This matches the pattern used in scripts/get-template-ids.ts
+    // In SDK v5.7.0, databases.query() may not exist - need to use dataSources.query()
+    // First, get the data source ID from the database
     let response
     try {
-      const databases = notion.databases as any
-      if (!databases) {
-        return NextResponse.json(
-          { 
-            error: "Notion databases API not available",
-            details: "notion.databases is undefined"
-          },
-          { status: 500 }
-        )
+      // Step 1: Retrieve the database to get its data source ID
+      const dbInfo = await notion.databases.retrieve({ database_id: databaseId })
+      
+      // Step 2: Extract data source ID (new API) or use database ID directly (old API)
+      let dataSourceId = databaseId
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (dbInfo && (dbInfo as any).data_sources && Array.isArray((dbInfo as any).data_sources) && (dbInfo as any).data_sources.length > 0) {
+        dataSourceId = (dbInfo as any).data_sources[0].id
+        console.log(`📋 Using data source ID: ${dataSourceId}`)
+      } else {
+        console.log(`⚠️ No data_sources found, using database ID as data source ID: ${dataSourceId}`)
       }
       
-      response = await databases.query({
-        database_id: databaseId,
+      // Step 3: Use dataSources.query() (new API in v5.7.0+)
+      // databases.query() is deprecated and may not exist
+      if (!notion.dataSources) {
+        throw new Error("dataSources API not available. SDK version may be incompatible.")
+      }
+      
+      response = await (notion.dataSources as any).query({
+        data_source_id: dataSourceId,
         filter: {
           property: "Status",
           select: {
@@ -101,7 +109,7 @@ export async function GET(request: NextRequest) {
             direction: "descending",
           },
         ],
-        page_size: 20, // Check last 20 items
+        page_size: 20,
       })
     } catch (queryError) {
       console.error("❌ Notion query error:", queryError)
@@ -109,7 +117,7 @@ export async function GET(request: NextRequest) {
         {
           error: "Failed to query Notion database",
           details: queryError instanceof Error ? queryError.message : String(queryError),
-          hint: "Check NOTION_API_KEY and database permissions",
+          hint: "Check NOTION_API_KEY, database permissions, and ensure database has a data source",
         },
         { status: 500 }
       )
