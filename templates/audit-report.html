@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} - Audit Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: rgba(0, 0, 0, 0.8);
+            background-color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        
+        .header {
+            padding: 0 0 40px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+            color: #000000;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+        
+        .logo-studio {
+            font-weight: 200;
+            color: rgba(0, 0, 0, 0.4);
+        }
+        
+        .report-meta {
+            margin-bottom: 40px;
+        }
+        
+        .report-meta h1 {
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: -0.8px;
+            color: #000000;
+            line-height: 1.3;
+            margin: 0 0 16px 0;
+        }
+        
+        .report-meta p {
+            font-size: 14px;
+            font-weight: 300;
+            color: rgba(0, 0, 0, 0.6);
+            margin: 8px 0;
+        }
+        
+        /* Markdown content styles */
+        .markdown-body {
+            font-size: 16px;
+            line-height: 1.7;
+            color: rgba(0, 0, 0, 0.8);
+        }
+        
+        .markdown-body h1 {
+            font-size: 32px;
+            font-weight: 300;
+            letter-spacing: -0.8px;
+            margin: 48px 0 24px 0;
+            color: #000000;
+            line-height: 1.3;
+        }
+        
+        .markdown-body h2 {
+            font-size: 24px;
+            font-weight: 400;
+            letter-spacing: -0.3px;
+            margin: 40px 0 16px 0;
+            color: #000000;
+        }
+        
+        .markdown-body h3 {
+            font-size: 20px;
+            font-weight: 400;
+            margin: 32px 0 12px 0;
+            color: #000000;
+        }
+        
+        .markdown-body h4 {
+            font-size: 18px;
+            font-weight: 400;
+            margin: 24px 0 8px 0;
+            color: #000000;
+        }
+        
+        .markdown-body p {
+            margin: 16px 0;
+            font-weight: 300;
+        }
+        
+        .markdown-body strong {
+            font-weight: 400;
+            color: #000000;
+        }
+        
+        .markdown-body em {
+            font-style: italic;
+        }
+        
+        .markdown-body code {
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        
+        .markdown-body pre {
+            background-color: rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 24px 0;
+        }
+        
+        .markdown-body pre code {
+            background-color: transparent;
+            padding: 0;
+            border-radius: 0;
+        }
+        
+        .markdown-body ul,
+        .markdown-body ol {
+            margin: 16px 0;
+            padding-left: 2em;
+        }
+        
+        .markdown-body li {
+            margin: 8px 0;
+        }
+        
+        .markdown-body blockquote {
+            border-left: 4px solid rgba(0, 0, 0, 0.2);
+            padding-left: 16px;
+            margin: 24px 0;
+            color: rgba(0, 0, 0, 0.6);
+            font-style: italic;
+        }
+        
+        .markdown-body table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 24px 0;
+        }
+        
+        .markdown-body th,
+        .markdown-body td {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .markdown-body th {
+            background-color: rgba(0, 0, 0, 0.02);
+            font-weight: 400;
+        }
+        
+        .markdown-body a {
+            color: #000000;
+            text-decoration: underline;
+        }
+        
+        .markdown-body hr {
+            border: none;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            margin: 32px 0;
+        }
+        
+        /* Syntax highlighting styles */
+        .hljs {
+            background: rgba(0, 0, 0, 0.03) !important;
+        }
+        
+        /* Mermaid diagram styles */
+        .mermaid {
+            margin: 24px 0;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.02);
+            border-radius: 8px;
+            padding: 24px;
+        }
+        
+        .mermaid svg {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Zynra <span class="logo-studio">Studio</span></div>
+        </div>
+        
+        <div class="report-meta">
+            <h1>{{title}}</h1>
+            <p><strong>Client:</strong> {{client}}</p>
+            <p><strong>Date:</strong> {{date}}</p>
+        </div>
+        
+        <div class="markdown-body">
+            {{markdownContent}}
+        </div>
+    </div>
+    
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true
+            }
+        });
+    </script>
+</body>
+</html>

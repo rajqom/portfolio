@@ -52,3 +52,11 @@ export const proposalSchema = z.object({
   startDate: z.string().optional(),
   additionalNotes: z.string().optional(),
 })
+
+// Audit report form schema
+export const auditReportSchema = z.object({
+  title: z.string().min(1, "Report title is required"),
+  client: z.string().min(1, "Client name is required"),
+  date: z.string().optional(),
+  content: z.string().min(10, "Report content is required"),
+})

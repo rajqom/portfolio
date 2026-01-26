@@ -30,7 +30,9 @@ export function PreviewPanel({
       ? "Email Preview"
       : activeTab === "contract"
         ? "Contract Preview"
-        : "Proposal Preview"
+        : activeTab === "proposal"
+          ? "Proposal Preview"
+          : "Audit Report Preview"
 
   return (
     <div className="lg:sticky lg:top-8 h-fit">
@@ -38,7 +40,7 @@ export function PreviewPanel({
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-light text-black">{previewTitle}</h3>
           <div className="flex gap-2">
-            {(activeTab === "contract" || activeTab === "proposal") && onDownloadPDF && (
+            {(activeTab === "contract" || activeTab === "proposal" || activeTab === "audit-report") && onDownloadPDF && (
               <Button
                 type="button"
                 onClick={onDownloadPDF}

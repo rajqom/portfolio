@@ -1,10 +1,10 @@
 import * as React from "react"
-import type { ProposalFormData } from "../types"
+import type { ProposalFormData, TabType } from "../types"
 import type { ContractData } from "@/lib/contract-template-processor"
 
 export function useProposalPreview(
   showPreview: boolean,
-  activeTab: "message" | "contract" | "proposal",
+  activeTab: TabType,
   watchedValues: ProposalFormData
 ) {
   const [previewHtml, setPreviewHtml] = React.useState<string>("")

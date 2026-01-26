@@ -1,6 +1,6 @@
 "use client"
 
-import { Mail, FileText, FileCheck } from "lucide-react"
+import { Mail, FileText, FileCheck, ClipboardList } from "lucide-react"
 import type { TabType } from "../types"
 
 interface FormTabsProps {
@@ -43,6 +43,17 @@ export function FormTabs({ activeTab, onTabChange }: FormTabsProps) {
       >
         <FileCheck className="inline h-4 w-4 mr-2" />
         Proposal
+      </button>
+      <button
+        onClick={() => onTabChange("audit-report")}
+        className={`px-6 py-3 text-sm font-light transition-colors border-b-2 ${
+          activeTab === "audit-report"
+            ? "border-white text-white"
+            : "border-transparent text-white/60 hover:text-white/80"
+        }`}
+      >
+        <ClipboardList className="inline h-4 w-4 mr-2" />
+        Audit Report
       </button>
     </div>
   )

@@ -1,10 +1,10 @@
 import * as React from "react"
 import { generateClientMessageEmail } from "@/lib/email-templates-client-message"
-import type { ClientMessageFormData } from "../types"
+import type { ClientMessageFormData, TabType } from "../types"
 
 export function useMessagePreview(
   showPreview: boolean,
-  activeTab: "message" | "contract" | "proposal",
+  activeTab: TabType,
   watchedValues: ClientMessageFormData
 ) {
   const [previewHtml, setPreviewHtml] = React.useState<string>("")

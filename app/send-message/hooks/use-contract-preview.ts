@@ -1,9 +1,9 @@
 import * as React from "react"
-import type { ContractFormData } from "../types"
+import type { ContractFormData, TabType } from "../types"
 
 export function useContractPreview(
   showPreview: boolean,
-  activeTab: "message" | "contract" | "proposal",
+  activeTab: TabType,
   watchedValues: ContractFormData
 ) {
   const [previewHtml, setPreviewHtml] = React.useState<string>("")

@@ -8,16 +8,18 @@ import { Button } from "@/components/ui/button"
 import Header from "@/components/ui/header"
 import Footer from "@/components/ui/footer"
 import { type ContractData } from "@/lib/contract-template-processor"
-import { clientMessageSchema, contractSchema, proposalSchema } from "./schemas/form-schemas"
-import type { ClientMessageFormData, ContractFormData, ProposalFormData, TabType } from "./types"
+import { clientMessageSchema, contractSchema, proposalSchema, auditReportSchema } from "./schemas/form-schemas"
+import type { ClientMessageFormData, ContractFormData, ProposalFormData, AuditReportFormData, TabType } from "./types"
 import { MessageForm } from "./components/message-form"
 import { ContractForm } from "./components/contract-form"
 import { ProposalForm } from "./components/proposal-form"
+import { AuditReportForm } from "./components/audit-report-form"
 import { FormTabs } from "./components/form-tabs"
 import { PreviewPanel } from "./components/preview-panel"
 import { useMessagePreview } from "./hooks/use-message-preview"
 import { useContractPreview } from "./hooks/use-contract-preview"
 import { useProposalPreview } from "./hooks/use-proposal-preview"
+import { useAuditPreview } from "./hooks/use-audit-preview"
 
 export default function SendMessagePage() {
   const [activeTab, setActiveTab] = React.useState<TabType>("message")
@@ -58,6 +60,14 @@ export default function SendMessagePage() {
     },
   })
 
+  // Audit report form
+  const auditForm = useForm<AuditReportFormData>({
+    resolver: zodResolver(auditReportSchema),
+    defaultValues: {
+      date: new Date().toISOString().split("T")[0],
+    },
+  })
+
   const { fields, append, remove } = useFieldArray({
     control: messageForm.control,
     name: "additionalSections",
@@ -66,6 +76,7 @@ export default function SendMessagePage() {
   const watchedMessageValues = messageForm.watch()
   const watchedContractValues = contractForm.watch()
   const watchedProposalValues = proposalForm.watch()
+  const watchedAuditValues = auditForm.watch()
 
   // Use preview hooks
   const messagePreviewHtml = useMessagePreview(showPreview, activeTab, watchedMessageValues)
@@ -79,6 +90,11 @@ export default function SendMessagePage() {
     activeTab,
     watchedProposalValues
   )
+  const { previewHtml: auditPreviewHtml } = useAuditPreview(
+    showPreview,
+    activeTab,
+    watchedAuditValues
+  )
 
   // Update preview HTML based on active tab
   React.useEffect(() => {
@@ -88,8 +104,10 @@ export default function SendMessagePage() {
       setPreviewHtml(contractPreviewHtml)
     } else if (activeTab === "proposal") {
       setPreviewHtml(proposalPreviewHtml)
+    } else if (activeTab === "audit-report") {
+      setPreviewHtml(auditPreviewHtml)
     }
-  }, [activeTab, messagePreviewHtml, contractPreviewHtml, proposalPreviewHtml])
+  }, [activeTab, messagePreviewHtml, contractPreviewHtml, proposalPreviewHtml, auditPreviewHtml])
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || [])
@@ -293,6 +311,71 @@ export default function SendMessagePage() {
     }
   }
 
+  const onAuditSubmit = async (data: AuditReportFormData) => {
+    setIsSubmitting(true)
+    setSubmitStatus("idle")
+    setErrorMessage("")
+
+    try {
+      const response = await fetch("/api/generate-audit-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        // Try to parse error response
+        let errorMessage = "Failed to generate PDF"
+        try {
+          const errorData = await response.json()
+          errorMessage = errorData.error || errorMessage
+        } catch {
+          errorMessage = `Server error: ${response.status} ${response.statusText}`
+        }
+        throw new Error(errorMessage)
+      }
+
+      // Check if response is actually a PDF
+      const contentType = response.headers.get("content-type")
+      if (!contentType || !contentType.includes("application/pdf")) {
+        throw new Error("Server did not return a PDF file")
+      }
+
+      // Get PDF blob and trigger download
+      const blob = await response.blob()
+      
+      if (blob.size === 0) {
+        throw new Error("Generated PDF is empty")
+      }
+
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = `${data.title.replace(/[^a-z0-9]/gi, '_')}.pdf`
+      a.style.display = "none"
+      document.body.appendChild(a)
+      a.click()
+      
+      // Cleanup
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url)
+        document.body.removeChild(a)
+      }, 100)
+
+      setSubmitStatus("success")
+
+      setTimeout(() => {
+        setSubmitStatus("idle")
+      }, 3000)
+    } catch (error) {
+      console.error("PDF generation error:", error)
+      setSubmitStatus("error")
+      setErrorMessage(error instanceof Error ? error.message : "An unexpected error occurred")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   const togglePreview = () => {
     setShowPreview(!showPreview)
   }
@@ -330,40 +413,47 @@ export default function SendMessagePage() {
                 </p>
               </div>
             </div>
-          ) : submitStatus === "success" && (activeTab === "contract" || activeTab === "proposal") ? (
+          ) : submitStatus === "success" && (activeTab === "contract" || activeTab === "proposal" || activeTab === "audit-report") ? (
             <div className="flex flex-col items-center justify-center py-16 space-y-4 bg-white/5 rounded-lg border border-white/10">
               <CheckCircle2 className="h-16 w-16 text-green-400" />
               <div className="text-center space-y-4">
                 <p className="text-xl font-light text-white">
-                  {activeTab === "contract" ? "Contract" : "Proposal"} generated successfully!
+                  {activeTab === "contract" ? "Contract" : activeTab === "proposal" ? "Proposal" : "Audit Report"} generated successfully!
                 </p>
-                <div className="flex gap-3">
-                  <Button
-                    onClick={() => {
-                      const html = activeTab === "contract" ? generatedContractHtml : generatedProposalHtml
-                      downloadPDF(html)
-                    }}
-                    className="bg-white text-black hover:bg-white/90"
-                  >
-                    <Download className="h-4 w-4 mr-2" />
-                    Download PDF
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      setShowPreview(true)
-                      if (activeTab === "contract") {
-                        setPreviewHtml(generatedContractHtml)
-                      } else {
-                        setPreviewHtml(generatedProposalHtml)
-                      }
-                    }}
-                    variant="outline"
-                    className="border-white/20 text-white hover:bg-white/10"
-                  >
-                    <Eye className="h-4 w-4 mr-2" />
-                    Preview
-                  </Button>
-                </div>
+                {activeTab !== "audit-report" && (
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => {
+                        const html = activeTab === "contract" ? generatedContractHtml : generatedProposalHtml
+                        downloadPDF(html)
+                      }}
+                      className="bg-white text-black hover:bg-white/90"
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Download PDF
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setShowPreview(true)
+                        if (activeTab === "contract") {
+                          setPreviewHtml(generatedContractHtml)
+                        } else {
+                          setPreviewHtml(generatedProposalHtml)
+                        }
+                      }}
+                      variant="outline"
+                      className="border-white/20 text-white hover:bg-white/10"
+                    >
+                      <Eye className="h-4 w-4 mr-2" />
+                      Preview
+                    </Button>
+                  </div>
+                )}
+                {activeTab === "audit-report" && (
+                  <p className="text-sm text-white/60">
+                    PDF has been downloaded to your computer.
+                  </p>
+                )}
               </div>
             </div>
           ) : (
@@ -417,6 +507,20 @@ export default function SendMessagePage() {
                     watchedValues={watchedProposalValues}
                   />
                 )}
+
+                {activeTab === "audit-report" && (
+                  <AuditReportForm
+                    form={{ register: auditForm.register, setValue: auditForm.setValue }}
+                    onSubmit={auditForm.handleSubmit(onAuditSubmit)}
+                    isSubmitting={isSubmitting}
+                    errors={auditForm.formState.errors}
+                    submitStatus={submitStatus}
+                    errorMessage={errorMessage}
+                    togglePreview={togglePreview}
+                    showPreview={showPreview}
+                    watchedValues={watchedAuditValues}
+                  />
+                )}
               </div>
 
               {/* Preview */}
@@ -432,7 +536,31 @@ export default function SendMessagePage() {
                         const html = activeTab === "contract" ? generatedContractHtml : generatedProposalHtml
                         downloadPDF(html)
                       }
-                    : undefined
+                    : activeTab === "audit-report"
+                      ? async () => {
+                          try {
+                            const response = await fetch("/api/generate-audit-pdf", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify(watchedAuditValues),
+                            })
+                            if (!response.ok) throw new Error("Failed to generate PDF")
+                            const blob = await response.blob()
+                            const url = window.URL.createObjectURL(blob)
+                            const a = document.createElement("a")
+                            a.href = url
+                            a.download = `${watchedAuditValues.title.replace(/[^a-z0-9]/gi, '_')}.pdf`
+                            document.body.appendChild(a)
+                            a.click()
+                            window.URL.revokeObjectURL(url)
+                            document.body.removeChild(a)
+                          } catch (error) {
+                            console.error("Error downloading PDF:", error)
+                            setErrorMessage("Failed to generate PDF. Please try again.")
+                            setSubmitStatus("error")
+                          }
+                        }
+                      : undefined
                 }
               />
             </div>
